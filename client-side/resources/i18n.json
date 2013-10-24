@@ -1,0 +1,10 @@
+{
+	"root": {
+		"userName": "User Name",
+		"signIn": "Sign In",
+		"login": "Login",
+		"password": "Password",
+		"passwordMustHaveFour": "Password must contain at least 4 characters"
+	},
+	"es": true
+}

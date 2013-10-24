@@ -1,0 +1,18 @@
+.njsLoginScreen {
+  top: 1%;
+  border-radius: 8px;
+  background-color: #b0c4de;
+}
+.njsLoginScreen .checkIcon.valid {
+  color: #008000;
+}
+.njsLoginScreen .checkIcon.invalid {
+  color: #f00;
+}
+.njsLoginScreen .signInLabel {
+  padding-right: 5px;
+}
+.njsLoginScreen .media-object {
+  height: 64px;
+  width: 64px;
+}

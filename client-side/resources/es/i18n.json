@@ -1,0 +1,7 @@
+{
+	"userName": "Nombre de Usuario",
+	"signIn": "Ingresar",
+	"login": "Inicio",
+	"password": "Contraseña",
+	"passwordMustHaveFour": "Su contraseña debe contener al menos 4 caracteres"
+}
