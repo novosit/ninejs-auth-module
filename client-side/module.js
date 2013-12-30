@@ -1,22 +1,25 @@
-define(['ninejs/modules/Module', 'ninejs/core/extend', 'ninejs/request', './LoginScreen'], function(Module, extend, request, LoginScreen) {
+define(['ninejs/modules/Module', 'ninejs/core/extend', './Auth'], function(Module, extend, Auth) {
 	'use strict';
 	var AuthModule = Module.extend({
-		init: extend.after(function(/*name, config*/) {
-			var router = this.getUnit('router'),
-				frame = this.getUnit('frame'),
-				loginScreen = new LoginScreen();
-			router.register('/login', function() {
-				frame.set('selected', loginScreen);
-			});
-			loginScreen.show();
-			frame.addChild(loginScreen.domNode);
+		getProvides: function(name) {
+			if (name === 'ninejs-auth-module') {
+				return this.auth;
+			}
+		},
+		init: extend.after(function(name, config) {
+			if (name === 'ninejs-auth-module') {
+				var router = this.getUnit('router'),
+					frame = this.getUnit('singlePageContainer'),
+					auth = new Auth(config, router, frame);
+				this.auth = auth;
+			}
 		}),
 		consumes: [
 			{
 				id: 'router'
 			},
 			{
-				id: 'frame'
+				id: 'singlePageContainer'
 			}
 		],
 		provides: [

@@ -1,4 +1,4 @@
-define(['ninejs/core/extend', 'ninejs/ui/Widget', './Skin/LoginScreen', 'ninejs/ui/bootstrap/Button', 'ninejs/core/i18n!./resources/i18n.json', 'dojo/on', 'ninejs/ui/utils/setClass', 'ninejs/core/deferredUtils'], function(extend, Widget, defaultSkin, Button, i18n, on, setClass, deferredUtils) {
+define(['ninejs/core/extend', 'ninejs/ui/Widget', './Skin/LoginScreen', 'ninejs/core/i18n!./resources/i18n.json', 'dojo/on', 'ninejs/ui/utils/setClass', 'ninejs/core/deferredUtils', 'ninejs/request'], function(extend, Widget, defaultSkin, i18n, on, setClass, deferredUtils, request) {
 	'use strict';
 	var resources = i18n.getResource(),
 		LoginScreen;
@@ -19,24 +19,25 @@ define(['ninejs/core/extend', 'ninejs/ui/Widget', './Skin/LoginScreen', 'ninejs/
 			}
 		},
 		updateSkin: extend.after(function() {
+			var self = this;
 			function validateInput(isValid) {
-				var valid = isValid && this.userNameText.value && this.passwordText.value;
-				setClass(this.loginIcon, '!valid', '!invalid', '!glyphicon-exclamation-sign', '!glyphicon-check');
+				var valid = isValid && self.userNameText.value && self.passwordText.value;
+				setClass(self.loginIcon, '!valid', '!invalid', '!glyphicon-exclamation-sign', '!glyphicon-check');
 				if (valid) {
-					setClass(this.loginIcon, 'glyphicon-check', 'valid');
+					setClass(self.loginIcon, 'glyphicon-check', 'valid');
 				}
 				else {
-					setClass(this.loginIcon, 'glyphicon-exclamation-sign', 'invalid');
+					setClass(self.loginIcon, 'glyphicon-exclamation-sign', 'invalid');
 				}
 			}
 			function validateUserName() {
-				validateInput.call(this);
+				validateInput();
 			}
 			function validateUserNameBlur() {
 				var deferred = deferredUtils.defer(),
-					value = this.userNameText.value;
-				if (this.userNameValidation) {
-					deferredUtils.when(this.userNameValidation.call(this, value), function(result) {
+					value = self.userNameText.value;
+				if (self.userNameValidation) {
+					deferredUtils.when(self.userNameValidation(value), function(result) {
 						deferred.resolve(result);
 					});
 				}
@@ -47,19 +48,18 @@ define(['ninejs/core/extend', 'ninejs/ui/Widget', './Skin/LoginScreen', 'ninejs/
 			}
 			function validatePassword() {
 				var message = '';
-				if (this.passwordValidation) {
-					message = this.passwordValidation(this.passwordText.value);	
+				if (self.passwordValidation) {
+					message = self.passwordValidation(self.passwordText.value);
 				}
-				setClass(this.passwordIcon, '!valid', '!invalid', '!glyphicon-exclamation-sign', '!glyphicon-check');
+				setClass(self.passwordIcon, '!valid', '!invalid', '!glyphicon-exclamation-sign', '!glyphicon-check');
 				if (!message) {
-					setClass(this.passwordIcon, 'glyphicon-check', 'valid');
+					setClass(self.passwordIcon, 'glyphicon-check', 'valid');
 				}
 				else {
-					setClass(this.passwordIcon, 'glyphicon-exclamation-sign', 'invalid');
+					setClass(self.passwordIcon, 'glyphicon-exclamation-sign', 'invalid');
 				}
-				validateInput.call(this, !message);
+				validateInput(!message);
 			}
-			var self = this;
 			this.own(
 				on(this.userNameText, 'keyup', function() {
 					validateUserName.call(self);
@@ -77,14 +77,33 @@ define(['ninejs/core/extend', 'ninejs/ui/Widget', './Skin/LoginScreen', 'ninejs/
 				}),
 				on(this.passwordText, 'keyup', function() {
 					validatePassword.call(self);
+				}),
+				on(this.loginButton, 'click', function() {
+					deferredUtils.when(request.post(self.config.loginUrl, { preventCache: true, handleAs: 'json', data: { user: self.userNameText.value, password: self.passwordText.value, parameters: {} } }), function(data) {
+						/* globals window */
+						if (data.result === 'success') {
+							self.emit('login', {});
+						}
+						else {
+							window.alert(data.message || 'login failed');
+						}
+					});
 				})
 			);
 			setTimeout(function() {
 				validateUserName.call(self);
 				validatePassword.call(self);
 				self.userNameText.focus();
-			}, 0)
+			}, 0);
 		})
+	}, function (config) {
+		var self = this;
+		this.config = config;
+		if (this.config.skin && this.config.skin.login) {
+			require(this.config.skin.login, function(skin) {
+				self.set('skin', skin);
+			});
+		}
 	});
 	return LoginScreen;
 });

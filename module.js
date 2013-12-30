@@ -11,6 +11,9 @@ var AuthModule = extend(Module, {
 		{
 			id: 'webserver',
 			version: '*'
+		},
+		{
+			id: 'ninejs/auth/impl'
 		}
 	],
 	provides: [

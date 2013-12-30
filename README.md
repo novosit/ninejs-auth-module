@@ -14,7 +14,7 @@ Provides a configurable authentication mechanism for your applications.
 
 | Method | Action             | Returns |
 |--------|--------------------|---------|
-| GET    | Queries whether or not I (as a user) am logged into the system. | `{ result: String of ('success', 'failed'), id: 'username', loggedInSince: Date }` |
-| POST   | Posts a login request to the server side. | `{ result: 'success', user: 'username', password: '', loggedInSince: Date }` |
+| GET    | Queries whether or not I (as a user) am logged into the system. | `{ result: String of ('success', 'failed'), id: 'username', loggedInSince: new Date(), permissions: [String] }` |
+| POST   | Posts a login request to the server side. `{ user: 'username', password: '', parameters: {} }` | `{ result: String of ('success', 'failed'), message: String }` |
 
 ## Client side
