@@ -2,12 +2,12 @@ define(['ninejs/modules/Module', 'ninejs/core/extend', './Auth'], function(Modul
 	'use strict';
 	var AuthModule = Module.extend({
 		getProvides: function(name) {
-			if (name === 'ninejs-auth-module') {
+			if (name === 'ninejs/auth') {
 				return this.auth;
 			}
 		},
 		init: extend.after(function(name, config) {
-			if (name === 'ninejs-auth-module') {
+			if (name === 'ninejs/auth') {
 				var router = this.getUnit('router'),
 					frame = this.getUnit('singlePageContainer'),
 					auth = new Auth(config, router, frame);
@@ -24,7 +24,7 @@ define(['ninejs/modules/Module', 'ninejs/core/extend', './Auth'], function(Modul
 		],
 		provides: [
 			{
-				id: 'ninejs-auth-module'
+				id: 'ninejs/auth'
 			}
 		]
 	});

@@ -3,6 +3,7 @@
 		"userName": "User Name",
 		"signIn": "Sign In",
 		"login": "Login",
+		"loginGreetingMessage": "Dear user, please sign in",
 		"password": "Password",
 		"passwordMustHaveFour": "Password must contain at least 4 characters"
 	},

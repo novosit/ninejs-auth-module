@@ -1,70 +1,130 @@
-define(['ninejs/core/extend', 'ninejs/core/deferredUtils', 'ninejs/core/ext/Evented', 'ninejs/request', './LoginScreen'], function(extend, deferredUtils, Evented, request, LoginScreen) {
+define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferredUtils', 'ninejs/core/ext/Evented', 'ninejs/request', './LoginScreen'], function(extend, Properties, deferredUtils, Evented, request, LoginScreen) {
 	'use strict';
-	var Auth = extend(Evented, function Auth(config, router, frame) {
+	var Auth = extend(Properties, Evented, function Auth(config, router, frame) {
 		var loginScreen,
 			enableLoginScreen,
 			self = this;
-		this.loginScreen = new LoginScreen(config);
+		this.config = config;
+		this.data = new Properties();
+		this.loginScreen = new LoginScreen({}, config);
 		loginScreen = this.loginScreen;
 		enableLoginScreen = function () {
-			frame.set('selected', loginScreen);
+			return deferredUtils.when(self.logout(), function() {
+				frame.set('selected', loginScreen);
+			});
 		};
-		this.register = function (route, action, permissions) {
-			var handle = router.register(route, function(evt) {
+		this.register = function (route, action, permissions, routeArguments) {
+			routeArguments = routeArguments || {};
+			routeArguments.route = route;
+			routeArguments.action = function (evt) {
 				function authenticate() {
-					deferredUtils.when(self.authenticationStatus(permissions || []), function(result) {
+					return deferredUtils.when(self.authenticationStatus(permissions || []), function (result) {
 						if (result) {
 							action.call(null, evt);
+							return true;
 						}
 						else {
-							deferredUtils.when(self.login(), function(){
-								setTimeout(function() {
-									authenticate();
+							return deferredUtils.when(self.login(), function () {
+								var defer = deferredUtils.defer();
+								setTimeout(function () {
+									deferredUtils.when(authenticate(), function (r) {
+										defer.resolve(r);
+									},
+									function (err) {
+										defer.fail(err);
+									});
 								}, 0);
+								return defer.promise;
 							});
 						}
 					});
 				}
-				authenticate();
-			});
+				return deferredUtils.when(authenticate(), function (r) {
+					return r;
+				});
+			};
+			var handle = router.register(routeArguments);
 			return handle;
 		};
-		this.login = function() {
+		this.logout = function () {
+			var self = this;
+			return deferredUtils.when(request.get(config.logoutUrl, { preventCache: false, handleAs: 'json' }), function (data) {
+				self.set('userName', null);
+				self.set('permissions', []);
+				self.emit('logout', data);
+				return true;
+			});
+		};
+		this.login = function () {
 			var currentSelection = frame.get('selected'),
 				defer = deferredUtils.defer(),
 				onLoginHandle;
-			enableLoginScreen();
-			onLoginHandle = this.loginScreen.on('login', function() {
-				onLoginHandle.remove();
-				if (currentSelection) {
-					frame.set('selected', currentSelection);
-				}
-				defer.resolve(true);
+			return deferredUtils.when(this.loginScreen.show(), function () {
+				deferredUtils.when(enableLoginScreen(), function () {
+					onLoginHandle = loginScreen.on('login', function () {
+						onLoginHandle.remove();
+						if (currentSelection) {
+							frame.set('selected', currentSelection);
+						}
+						defer.resolve(true);
+					});
+				});
+				return defer.promise;
 			});
-			return defer.promise;
 		};
-		this.authenticationStatus = function() {
+		this.authenticationStatus = function (requiredPermissions) {
 			var self = this;
 			return deferredUtils.when(request.get(config.loginUrl, { preventCache: false, handleAs: 'json' }), function(data) {
 				var r = false;
 				if (data.result === 'success') {
-					self.userName = data.id;
-					self.permissions = data.permissions || [];
-					r = true;
+					self.data.mixinRecursive(data);
+					//data.permissions = data.permissions || [];
+					//self.set('userName', data.id);
+					//self.set('permissions', data.permissions);
+					if (requiredPermissions.length) {
+						var cnt,
+							len = requiredPermissions.length,
+							current,
+							dcnt,
+							dlen = self.data.permissions.length,
+							found;
+						r = true;
+						for (cnt = 0; cnt < len; cnt += 1) {
+							current = requiredPermissions[cnt];
+							found = false;
+							for (dcnt = 0; (dcnt < dlen) && !found; dcnt += 1) {
+								if (current === self.data.permissions[dcnt]) {
+									found = true;
+								}
+							}
+							r = r && !!found;
+						}
+					}
+					else {
+						r = true;
+					}
 				}
 				else {
-					self.userName = null;
-					self.permissions = [];
+					self.data.set('id', null);
+					self.data.set('permissions', []);
 				}
-				self.emit('login', data);
+				setTimeout(function () {
+					self.emit('login', data);
+				}, 0);
 				return r;
 			});
 		};
 		router.register('/login', function() {
 			enableLoginScreen();
 		});
-		loginScreen.show();
-		frame.addChild(loginScreen.domNode);
+		router.register('/logout', function() {
+			deferredUtils.when(self.logout(), function() {
+				router.go('/');
+			});
+		});	
+		deferredUtils.when(loginScreen.show(), function() {
+			frame.addChild(loginScreen.domNode);
+		});
 	});
 	return Auth;
 });

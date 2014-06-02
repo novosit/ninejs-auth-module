@@ -4,6 +4,11 @@ define(['ninejs/core/extend', 'ninejs/ui/Widget', './Skin/LoginScreen', 'ninejs/
 		LoginScreen;
 	LoginScreen = Widget.extend({
 		skin: defaultSkin,
+		skinContract: {
+			validateInput: {
+				type: 'function'
+			}
+		},
 		i18n: function() {
 			return resources[arguments[0]];
 		},
@@ -18,91 +23,40 @@ define(['ninejs/core/extend', 'ninejs/ui/Widget', './Skin/LoginScreen', 'ninejs/
 				return this.i18n('passwordMustHaveFour');
 			}
 		},
-		updateSkin: extend.after(function() {
+		onUpdatedSkin: extend.after(function() {
 			var self = this;
-			function validateInput(isValid) {
-				var valid = isValid && self.userNameText.value && self.passwordText.value;
-				setClass(self.loginIcon, '!valid', '!invalid', '!glyphicon-exclamation-sign', '!glyphicon-check');
-				if (valid) {
-					setClass(self.loginIcon, 'glyphicon-check', 'valid');
-				}
-				else {
-					setClass(self.loginIcon, 'glyphicon-exclamation-sign', 'invalid');
-				}
-			}
-			function validateUserName() {
-				validateInput();
-			}
-			function validateUserNameBlur() {
-				var deferred = deferredUtils.defer(),
-					value = self.userNameText.value;
-				if (self.userNameValidation) {
-					deferredUtils.when(self.userNameValidation(value), function(result) {
-						deferred.resolve(result);
-					});
-				}
-				else {
-					deferred.resolve(true);
-				}
-				return deferred;
-			}
-			function validatePassword() {
-				var message = '';
-				if (self.passwordValidation) {
-					message = self.passwordValidation(self.passwordText.value);
-				}
-				setClass(self.passwordIcon, '!valid', '!invalid', '!glyphicon-exclamation-sign', '!glyphicon-check');
-				if (!message) {
-					setClass(self.passwordIcon, 'glyphicon-check', 'valid');
-				}
-				else {
-					setClass(self.passwordIcon, 'glyphicon-exclamation-sign', 'invalid');
-				}
-				validateInput(!message);
+			function performLogin() {
+				return deferredUtils.when(request.post(self.config.loginUrl, { preventCache: true, handleAs: 'json', data: { user: self.userNameText.value, password: self.passwordText.value, parameters: {} } }), function(data) {
+					/* globals window */
+					if (data.result === 'success') {
+						self.passwordText.value = '';
+						setTimeout(function () {
+							self.emit('login', data);
+						}, 0);
+					}
+					else {
+						window.alert(data.message || 'login failed');
+					}
+					return true;
+				}, function(err) {
+					console.log(err);
+				});
 			}
 			this.own(
-				on(this.userNameText, 'keyup', function() {
-					validateUserName.call(self);
-				}),
-				on(this.userNameText, 'blur', function() {
-					deferredUtils.when(validateUserNameBlur.call(self), function(valid) {
-						setClass(self.userNameIcon, '!valid', '!invalid', '!glyphicon-exclamation-sign', '!glyphicon-check');
-						if (valid) {
-							setClass(self.userNameIcon, 'glyphicon-check', 'valid');
-						}
-						else {
-							setClass(self.userNameIcon, 'glyphicon-exclamation-sign', 'invalid');
-						}
-					});
-				}),
-				on(this.passwordText, 'keyup', function() {
-					validatePassword.call(self);
-				}),
-				on(this.loginButton, 'click', function() {
-					deferredUtils.when(request.post(self.config.loginUrl, { preventCache: true, handleAs: 'json', data: { user: self.userNameText.value, password: self.passwordText.value, parameters: {} } }), function(data) {
-						/* globals window */
-						if (data.result === 'success') {
-							self.emit('login', {});
-						}
-						else {
-							window.alert(data.message || 'login failed');
-						}
-					});
-				})
+				on(this.loginButton, 'click', performLogin),
+				on(this, 'performLogin', performLogin)
 			);
 			setTimeout(function() {
-				validateUserName.call(self);
-				validatePassword.call(self);
+				self.currentSkin.validateUserName.call(self);
+				self.currentSkin.validatePassword.call(self);
 				self.userNameText.focus();
 			}, 0);
 		})
-	}, function (config) {
+	}, function (_0, config) {
 		var self = this;
 		this.config = config;
-		if (this.config.skin && this.config.skin.login) {
-			require(this.config.skin.login, function(skin) {
-				self.set('skin', skin);
-			});
+		if (self.config.skin && self.config.skin.login) {
+			self.set('skin', self.config.skin.login);
 		}
 	});
 	return LoginScreen;

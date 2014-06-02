@@ -16,7 +16,7 @@ Auth = extend(Evented, {
 
 	server.clientSetup(function(utils) {
 		utils.addAmdPath('ninejs-auth-module', path.resolve(__dirname, 'client-side'));
-		utils.addModule('ninejs-auth-module/module', { 'ninejs-auth-module': { loginUrl: '/service/login' }});
+		utils.addModule('ninejs-auth-module/module', { 'ninejs/auth': { loginUrl: '/service/login', logoutUrl: '/service/logout' }});
 	});
 	server.add(new Endpoint( { route: '/service/login',  method: 'get', handler: function(req, res) {
 		var session = req.session,
@@ -49,7 +49,6 @@ Auth = extend(Evented, {
 			};
 			res.end(JSON.stringify(result));
 		}
-		self.emit('login', result);
 	}}));
 	server.add(new Endpoint( { route: '/service/login',  method: 'post', handler: function(req, res) {
 		res.set('Content-Type', 'application/json');
@@ -63,8 +62,23 @@ Auth = extend(Evented, {
 			}
 			return data;
 		}), function(data) {
+			self.emit('login', data);
 			res.end(JSON.stringify(data));
 		});
+	}}));
+	server.add(new Endpoint( { route: '/service/logout',  method: 'get', handler: function(req, res) {
+		var session = req.session,
+			result;
+		res.set('Content-Type', 'application/json');
+		if (session) {
+			req.session.destroy();
+			req.session = null;
+		}
+		result = {
+			result: 'success'
+		};
+		self.emit('logout', result);
+		res.end(JSON.stringify(result));
 	}}));
 	//server.add(new SinglePageContainer({ route: '/login' }));
 	this.login = function(username, password, domain, callback) {
