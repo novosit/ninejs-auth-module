@@ -81,27 +81,32 @@ define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferre
 					//data.permissions = data.permissions || [];
 					//self.set('userName', data.id);
 					//self.set('permissions', data.permissions);
-					if (requiredPermissions.length) {
-						var cnt,
-							len = requiredPermissions.length,
-							current,
-							dcnt,
-							dlen = self.data.permissions.length,
-							found;
-						r = true;
-						for (cnt = 0; cnt < len; cnt += 1) {
-							current = requiredPermissions[cnt];
-							found = false;
-							for (dcnt = 0; (dcnt < dlen) && !found; dcnt += 1) {
-								if (current === self.data.permissions[dcnt]) {
-									found = true;
-								}
-							}
-							r = r && !!found;
-						}
+					if (typeof(requiredPermissions) === 'function') {
+						r = (requiredPermissions(self.data.permissions));
 					}
 					else {
-						r = true;
+						if (requiredPermissions.length) {
+							var cnt,
+								len = requiredPermissions.length,
+								current,
+								dcnt,
+								dlen = self.data.permissions.length,
+								found;
+							r = true;
+							for (cnt = 0; cnt < len; cnt += 1) {
+								current = requiredPermissions[cnt];
+								found = false;
+								for (dcnt = 0; (dcnt < dlen) && !found; dcnt += 1) {
+									if (current === self.data.permissions[dcnt]) {
+										found = true;
+									}
+								}
+								r = r && !!found;
+							}
+						}
+						else {
+							r = true;
+						}
 					}
 				}
 				else {
@@ -113,6 +118,19 @@ define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferre
 				}, 0);
 				return r;
 			});
+		};
+		this.hasPermission = function (permission) {
+			if (this.data && this.data.permissions) {
+				var cnt,
+					arr = this.data.permissions,
+					len = arr.length;
+				for (cnt = 0; cnt < len; cnt += 1) {
+					if (arr[cnt] === permission) {
+						return true;
+					}
+				}
+			}
+			return false;
 		};
 		router.register('/login', function() {
 			enableLoginScreen();
