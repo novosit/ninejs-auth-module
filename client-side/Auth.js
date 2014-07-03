@@ -20,8 +20,9 @@ define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferre
 				function authenticate() {
 					return deferredUtils.when(self.authenticationStatus(permissions || []), function (result) {
 						if (result) {
-							action.call(null, evt);
-							return true;
+							return deferredUtils.when(action.call(null, evt), function () {
+								return true;
+							});
 						}
 						else {
 							return deferredUtils.when(self.login(), function () {
