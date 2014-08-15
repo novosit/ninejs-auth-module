@@ -118,6 +118,9 @@ define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferre
 					self.emit('login', data);
 				}, 0);
 				return r;
+			}, function (err) {
+				console.error(err);
+				throw err;
 			});
 		};
 		this.hasPermission = function (permission) {

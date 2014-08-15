@@ -30,6 +30,9 @@ define(['ninejs/core/extend', 'ninejs/ui/Widget', './Skin/LoginScreen', 'ninejs/
 					/* globals window */
 					if (data.result === 'success') {
 						self.passwordText.value = '';
+						if (typeof(data.loggedInSince) === 'number') {
+							data.loggedInSince = new Date(data.loggedInSince);
+						}
 						setTimeout(function () {
 							self.emit('login', data);
 						}, 0);
