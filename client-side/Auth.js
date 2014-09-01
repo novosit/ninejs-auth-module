@@ -138,12 +138,20 @@ define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferre
 		};
 		router.register('/login', function() {
 			enableLoginScreen();
-		});
+		}, extend.mixinRecursive({
+			emitArguments: {
+				tabKey: 'login'
+			}
+		}, config.loginRouterArguments || {}));
 		router.register('/logout', function() {
 			deferredUtils.when(self.logout(), function() {
 				router.go('/');
 			});
-		});	
+		}, extend.mixinRecursive({
+			emitArguments: {
+				tabKey: 'logout'
+			}
+		}, config.logoutRouterArguments || {}));
 		deferredUtils.when(loginScreen.show(), function() {
 			frame.addChild(loginScreen.domNode);
 		});
