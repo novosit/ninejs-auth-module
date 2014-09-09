@@ -49,7 +49,7 @@ define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferre
 		};
 		this.logout = function () {
 			var self = this;
-			return deferredUtils.when(request.get(config.logoutUrl, { preventCache: false, handleAs: 'json' }), function (data) {
+			return deferredUtils.when(request.get(config.logoutUrl, { preventCache: false, handleAs: 'json', withCredentials: true }), function (data) {
 				self.set('userName', null);
 				self.set('permissions', []);
 				self.emit('logout', data);
@@ -75,7 +75,7 @@ define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferre
 		};
 		this.authenticationStatus = function (requiredPermissions) {
 			var self = this;
-			return deferredUtils.when(request.get(config.loginUrl, { preventCache: false, handleAs: 'json' }), function(data) {
+			return deferredUtils.when(request.get(config.loginUrl, { preventCache: false, handleAs: 'json', withCredentials: true }), function(data) {
 				var r = false;
 				if (data.result === 'success') {
 					self.data.mixinRecursive(data);

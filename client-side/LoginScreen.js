@@ -26,7 +26,7 @@ define(['ninejs/core/extend', 'ninejs/ui/Widget', './Skin/LoginScreen', 'ninejs/
 		onUpdatedSkin: extend.after(function() {
 			var self = this;
 			function performLogin() {
-				return deferredUtils.when(request.post(self.config.loginUrl, { preventCache: true, handleAs: 'json', data: { user: self.userNameText.value, password: self.passwordText.value, parameters: {} } }), function(data) {
+				return deferredUtils.when(request.post(self.config.loginUrl, { preventCache: true, handleAs: 'json', withCredentials: true, data: { user: self.userNameText.value, password: self.passwordText.value, parameters: {} } }), function(data) {
 					/* globals window */
 					if (data.result === 'success') {
 						self.passwordText.value = '';
@@ -58,6 +58,7 @@ define(['ninejs/core/extend', 'ninejs/ui/Widget', './Skin/LoginScreen', 'ninejs/
 	}, function (_0, config) {
 		var self = this;
 		this.config = config;
+		this.userName = '';
 		if (self.config.skin && self.config.skin.login) {
 			self.set('skin', self.config.skin.login);
 		}
