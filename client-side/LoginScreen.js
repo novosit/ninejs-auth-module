@@ -1,5 +1,6 @@
-define(['ninejs/core/extend', 'ninejs/ui/Widget', './Skin/LoginScreen', 'ninejs/core/i18n!./resources/i18n.json', 'dojo/on', 'ninejs/ui/utils/setClass', 'ninejs/core/deferredUtils', 'ninejs/request'], function(extend, Widget, defaultSkin, i18n, on, setClass, deferredUtils, request) {
+define(['ninejs/core/extend', 'ninejs/ui/Widget', './Skin/LoginScreen', 'ninejs/core/i18n!./resources/i18n.json', 'ninejs/core/on', 'ninejs/core/deferredUtils', 'ninejs/request', 'ninejs/ui/bootstrap/bootstrap'], function(extend, Widget, defaultSkin, i18n, on, deferredUtils, request, bootstrap) {
 	'use strict';
+	bootstrap.enable('css');
 	var resources = i18n.getResource(),
 		LoginScreen;
 	LoginScreen = Widget.extend({
