@@ -57,6 +57,7 @@ define(['ninejs/core/extend', 'ninejs/ui/Widget', './Skin/LoginScreen', 'ninejs/
 			}, 0);
 		})
 	}, function (_0, config) {
+		/* jshint unused: true */
 		var self = this;
 		this.config = config;
 		this.userName = '';

@@ -1,6 +1,6 @@
 define(['ninejs/ui/Skin', 'ninejs/css!./LoginScreen.css', 'ninejs/nineplate!./LoginScreen.html', 'ninejs/ui/utils/setClass', 'ninejs/core/deferredUtils', 'dojo/on'], function (Skin, css, template, setClass, deferredUtils, on) {
 	'use strict';
-	function validateInput(isValid) {
+	var validateInput = function (isValid) {
 		var valid = isValid && this.userNameText.value && this.passwordText.value;
 		setClass(this.loginIcon, '!valid', '!invalid', '!glyphicon-exclamation-sign', '!glyphicon-check');
 		if (valid) {
@@ -9,13 +9,14 @@ define(['ninejs/ui/Skin', 'ninejs/css!./LoginScreen.css', 'ninejs/nineplate!./Lo
 		else {
 			setClass(this.loginIcon, 'glyphicon-exclamation-sign', 'invalid');
 		}
-	}
-	function validateUserName() {
+	};
+	var validateUserName = function () {
 		validateInput.call(this);
-	}
-	function validateUserNameBlur() {
+	};
+	var validateUserNameBlur = function () {
 		var deferred = deferredUtils.defer(),
-			value = this.userNameText.value;
+			value = this.userNameText.value,
+			self = this;
 		if (this.userNameValidation) {
 			deferredUtils.when(this.userNameValidation(value), function(result) {
 				deferred.resolve(result);
@@ -34,10 +35,10 @@ define(['ninejs/ui/Skin', 'ninejs/css!./LoginScreen.css', 'ninejs/nineplate!./Lo
 			}
 			return valid;
 		});
-	}
-	function validatePassword() {
+	};
+	var validatePassword = function () {
 		var message = '';
-		if (self.passwordValidation) {
+		if (this.passwordValidation) {
 			message = this.passwordValidation(this.passwordText.value);
 		}
 		setClass(this.passwordIcon, '!valid', '!invalid', '!glyphicon-exclamation-sign', '!glyphicon-check');
@@ -48,7 +49,7 @@ define(['ninejs/ui/Skin', 'ninejs/css!./LoginScreen.css', 'ninejs/nineplate!./Lo
 			setClass(this.passwordIcon, 'glyphicon-exclamation-sign', 'invalid');
 		}
 		validateInput.call(this, !message);
-	}
+	};
 	return new Skin({
 		cssList: [css],
 		template: template,
