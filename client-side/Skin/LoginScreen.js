@@ -1,4 +1,4 @@
-define(['ninejs/ui/Skin', 'ninejs/css!./LoginScreen.css', 'ninejs/nineplate!./LoginScreen.html', 'ninejs/ui/utils/setClass', 'ninejs/core/deferredUtils', 'dojo/on'], function (Skin, css, template, setClass, deferredUtils, on) {
+define(['ninejs/ui/Skin', 'ninejs/css!./LoginScreen.css', 'ninejs/nineplate!./LoginScreen.html', 'ninejs/ui/utils/setClass', 'ninejs/core/deferredUtils', 'ninejs/core/on'], function (Skin, css, template, setClass, deferredUtils, on) {
 	'use strict';
 	var validateInput = function (isValid) {
 		var valid = isValid && this.userNameText.value && this.passwordText.value;
