@@ -2,7 +2,9 @@
 var extend = require('ninejs/core/extend'),
 	Evented = require('ninejs/core/ext/Evented'),
 	deferredUtils = require('ninejs/core/deferredUtils'),
+	objUtils = require('ninejs/core/objUtils'),
 	path = require('path'),
+	co = require('co'),
 	Auth;
 Auth = extend(Evented, {
 	
@@ -80,7 +82,28 @@ Auth = extend(Evented, {
 		self.emit('logout', result);
 		res.end(JSON.stringify(result));
 	}}));
-	//server.add(new SinglePageContainer({ route: '/login' }));
+	server.add(new Endpoint( { route: '/service/auth/users',  method: 'get', handler: function(req, res) {
+		co(function* () {
+			if (req.query.byPermissions) {
+				var permissions = JSON.parse('\"' + req.query.byPermissions + '\"');
+				if (!objUtils.isArray(permissions)) {
+					permissions = [permissions];
+				}
+				var users = yield self.usersByPermission(permissions);
+				res.end(JSON.stringify(users));
+			}
+			else {
+				var users = yield self.usersByPermission();
+				res.end(JSON.stringify(users));
+			}
+		});
+	}}));
+	server.add(new Endpoint( { route: '/service/auth/permissions',  method: 'get', handler: function(req, res) {
+		co(function* () {
+			var permissions = yield self.permissions();
+			res.end(JSON.stringify(permissions));
+		});
+	}}));
 	this.login = function(username, password, domain, callback) {
 		if ((typeof(domain) === 'function') && !callback) {
 			callback = domain;
@@ -92,6 +115,12 @@ Auth = extend(Evented, {
 			}
 			return data;
 		});
+	};
+	this.usersByPermission = function(permissions) {
+		return this.impl.usersByPermission(permissions);
+	};
+	this.permissions = function() {
+		return this.impl.permissions();
 	};
 });
 module.exports = Auth;
