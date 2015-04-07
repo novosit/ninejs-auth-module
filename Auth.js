@@ -43,6 +43,8 @@ Auth = extend(Evented, {
 					};
 				}
 				res.end(JSON.stringify(result));
+			}, function (err) {
+				console.error(err);
 			});
 		}
 		else {

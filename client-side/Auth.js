@@ -36,12 +36,21 @@ define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferre
 									});
 								}, 0);
 								return defer.promise;
+							}, function (err) {
+								console.error(err);
+								throw err;								
 							});
 						}
+					}, function (err) {
+						console.error(err);
+						throw err;
 					});
 				}
 				return deferredUtils.when(authenticate(), function (r) {
 					return r;
+				}, function (err) {
+					console.error(err);
+					throw err;
 				});
 			};
 			var handle = router.register(routeArguments);
