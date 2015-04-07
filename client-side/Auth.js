@@ -144,7 +144,7 @@ define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferre
 			return false;
 		};
 		this.hasPermission = function (permission) {
-			return this.hasPermissions([permission]);
+			return this.hasAllPermissions([permission]);
 		};
 		router.register('/login', function() {
 			enableLoginScreen();
