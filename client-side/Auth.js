@@ -123,18 +123,28 @@ define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferre
 				throw err;
 			});
 		};
-		this.hasPermission = function (permission) {
-			if (this.data && this.data.permissions) {
-				var cnt,
-					arr = this.data.permissions,
-					len = arr.length;
-				for (cnt = 0; cnt < len; cnt += 1) {
-					if (arr[cnt] === permission) {
-						return true;
+		/**
+		 * Checks if the actual user permissions contains all the permissions to check. Use this method to validate if a user has a set of permissions prior to perform some controlled action.
+		 * @param  {Array of String}  permissions Permissions to check.
+		 * @return {Boolean}  `true` if the logged in user has all the permissions given as parameter
+		 */
+		this.hasAllPermissions = function (permissions) {
+
+			if (this.data && this.data.permissions && this.data.permissions.length) {
+				var arr = this.data.permissions;
+				for (var i = permissions.length - 1; i >= 0; i -= 1) {
+					if (arr.indexOf(permissions[i]) === -1) {
+						return false;
 					}
 				}
+
+				return true;
 			}
+
 			return false;
+		};
+		this.hasPermission = function (permission) {
+			return this.hasPermissions([permission]);
 		};
 		router.register('/login', function() {
 			enableLoginScreen();
