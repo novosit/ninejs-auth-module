@@ -15,6 +15,7 @@ define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferre
 		};
 		this.register = function (route, action, permissions, routeArguments) {
 			routeArguments = routeArguments || {};
+			action = action || routeArguments.action;
 			routeArguments.route = route;
 			routeArguments.action = function (evt) {
 				function authenticate() {
