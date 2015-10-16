@@ -1,6 +1,8 @@
 define(['ninejs/modules/Module', 'ninejs/core/extend', './Auth'], function(Module, extend, Auth) {
 	'use strict';
-	var AuthModule = Module.extend({
+	extend = extend.default;
+	Module = Module.default;
+	var AuthModule = extend(Module, {
 		getProvides: function(name) {
 			if (name === 'ninejs/auth') {
 				return this.auth;

@@ -1,5 +1,8 @@
 define(['ninejs/ui/Skin', 'ninejs/css!./LoginScreen.css', 'ninejs/nineplate!./LoginScreen.html', 'ninejs/ui/utils/setClass', 'ninejs/core/deferredUtils', 'ninejs/core/on', 'ninejs/ui/bootstrap/bootstrap'], function (Skin, css, template, setClass, deferredUtils, on, bootstrap) {
 	'use strict';
+	Skin = Skin.default;
+	on = on.default;
+	bootstrap = bootstrap.default;
 	var validateInput = function (isValid) {
 		var valid = isValid && this.userNameText.value && this.passwordText.value;
 		setClass(this.loginIcon, '!valid', '!invalid', '!glyphicon-exclamation-sign', '!glyphicon-check');
@@ -18,14 +21,14 @@ define(['ninejs/ui/Skin', 'ninejs/css!./LoginScreen.css', 'ninejs/nineplate!./Lo
 			value = this.userNameText.value,
 			self = this;
 		if (this.userNameValidation) {
-			deferredUtils.when(this.userNameValidation(value), function(result) {
+			deferredUtils.when(this.userNameValidation(value), function (result) {
 				deferred.resolve(result);
 			});
 		}
 		else {
 			deferred.resolve(true);
 		}
-		return deferredUtils.when(deferred.promise, function(valid) {
+		return deferredUtils.when(deferred.promise, function (valid) {
 			setClass(self.userNameIcon, '!valid', '!invalid', '!glyphicon-exclamation-sign', '!glyphicon-check');
 			if (valid) {
 				setClass(self.userNameIcon, 'glyphicon-check', 'valid');
@@ -53,16 +56,16 @@ define(['ninejs/ui/Skin', 'ninejs/css!./LoginScreen.css', 'ninejs/nineplate!./Lo
 	return new Skin({
 		cssList: [css],
 		template: template,
-		updated: function(control) {
+		updated: function (control) {
 			bootstrap.enable('css');
 			control.own(
-				on(control.userNameText, 'keyup', function() {
+				on(control.userNameText, 'keyup', function () {
 					control.currentSkin.validateUserName.call(control);
 				}),
-				on(control.userNameText, 'blur', function() {
+				on(control.userNameText, 'blur', function () {
 					control.currentSkin.validateUserNameBlur.call(control);
 				}),
-				on(control.passwordText, 'keyup', function() {
+				on(control.passwordText, 'keyup', function () {
 					control.currentSkin.validatePassword.call(control);
 				})
 			);

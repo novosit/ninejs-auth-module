@@ -1,6 +1,6 @@
 'use strict';
-var extend = require('ninejs/core/extend');
-var Module = require('ninejs/modules/Module');
+var extend = require('ninejs/core/extend').default;
+var Module = require('ninejs/modules/Module').default;
 var AuthModule = extend(Module, {
 	consumes: [
 		{

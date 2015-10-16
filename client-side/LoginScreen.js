@@ -1,5 +1,7 @@
-define(['ninejs/core/extend', 'ninejs/ui/Widget', './Skin/LoginScreen', 'ninejs/core/i18n!./resources/i18n.json', 'ninejs/core/on', 'ninejs/core/deferredUtils', 'ninejs/request'], function(extend, Widget, defaultSkin, i18n, on, deferredUtils, request) {
+define(['ninejs/core/extend', 'ninejs/ui/Widget', './Skin/LoginScreen', 'ninejs/core/i18n!./resources/i18n.json', 'ninejs/core/on', 'ninejs/core/deferredUtils', 'ninejs/request'], function (extend, Widget, defaultSkin, i18n, on, deferredUtils, request) {
 	'use strict';
+	Widget = Widget.default;
+	on = on.default;
 
 	var resources = i18n.getResource(),
 		LoginScreen;
@@ -10,13 +12,13 @@ define(['ninejs/core/extend', 'ninejs/ui/Widget', './Skin/LoginScreen', 'ninejs/
 				type: 'function'
 			}
 		},
-		i18n: function() {
+		i18n: function () {
 			return resources[arguments[0]];
 		},
-		userNameValidation: function(value) {
+		userNameValidation: function (value) {
 			return !!value;
 		},
-		passwordValidation: function(value) {
+		passwordValidation: function (value) {
 			if (value && value.length > 3) {
 				return '';
 			}
@@ -24,10 +26,16 @@ define(['ninejs/core/extend', 'ninejs/ui/Widget', './Skin/LoginScreen', 'ninejs/
 				return this.i18n('passwordMustHaveFour');
 			}
 		},
-		onUpdatedSkin: extend.after(function() {
+		onUpdatedSkin: extend.after(function () {
 			var self = this;
+
 			function performLogin() {
-				return deferredUtils.when(request.post(self.config.loginUrl, { preventCache: true, handleAs: 'json', withCredentials: true, data: { user: self.userNameText.value, password: self.passwordText.value, parameters: {} } }), function(data) {
+				return deferredUtils.when(request.post(self.config.loginUrl, {
+					preventCache: true,
+					handleAs: 'json',
+					withCredentials: true,
+					data: {user: self.userNameText.value, password: self.passwordText.value, parameters: {}}
+				}), function (data) {
 					/* globals window */
 					if (data.result === 'success') {
 						self.passwordText.value = '';
@@ -42,15 +50,16 @@ define(['ninejs/core/extend', 'ninejs/ui/Widget', './Skin/LoginScreen', 'ninejs/
 						window.alert(data.message || 'login failed');
 					}
 					return true;
-				}, function(err) {
+				}, function (err) {
 					console.log(err);
 				});
 			}
+
 			this.own(
 				on(this.loginButton, 'click', performLogin),
 				on(this, 'performLogin', performLogin)
 			);
-			setTimeout(function() {
+			setTimeout(function () {
 				self.currentSkin.validateUserName.call(self);
 				self.currentSkin.validatePassword.call(self);
 				self.userNameText.focus();

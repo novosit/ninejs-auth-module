@@ -1,6 +1,6 @@
 'use strict';
-var extend = require('ninejs/core/extend'),
-	Evented = require('ninejs/core/ext/Evented'),
+var extend = require('ninejs/core/extend').default,
+	Evented = require('ninejs/core/ext/Evented').default,
 	deferredUtils = require('ninejs/core/deferredUtils'),
 	objUtils = require('ninejs/core/objUtils'),
 	path = require('path'),

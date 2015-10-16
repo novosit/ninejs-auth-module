@@ -1,5 +1,8 @@
-define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferredUtils', 'ninejs/core/ext/Evented', 'ninejs/request', './LoginScreen'], function(extend, Properties, deferredUtils, Evented, request, LoginScreen) {
+define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferredUtils', 'ninejs/core/ext/Evented', 'ninejs/request', './LoginScreen'], function (extend, Properties, deferredUtils, Evented, request, LoginScreen) {
 	'use strict';
+	extend = extend.default;
+	Properties = Properties.default;
+	Evented = Evented.default;
 	var Auth = extend(Properties, Evented, function Auth(config, router, frame) {
 		var loginScreen,
 			enableLoginScreen,
@@ -9,7 +12,7 @@ define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferre
 		this.loginScreen = new LoginScreen({}, config);
 		loginScreen = this.loginScreen;
 		enableLoginScreen = function () {
-			return deferredUtils.when(self.logout(), function() {
+			return deferredUtils.when(self.logout(), function () {
 				frame.set('selected', loginScreen);
 			});
 		};
@@ -30,16 +33,16 @@ define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferre
 								var defer = deferredUtils.defer();
 								setTimeout(function () {
 									deferredUtils.when(authenticate(), function (r) {
-										defer.resolve(r);
-									},
-									function (err) {
-										defer.fail(err);
-									});
+											defer.resolve(r);
+										},
+										function (err) {
+											defer.fail(err);
+										});
 								}, 0);
 								return defer.promise;
 							}, function (err) {
 								console.error(err);
-								throw err;								
+								throw err;
 							});
 						}
 					}, function (err) {
@@ -47,6 +50,7 @@ define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferre
 						throw err;
 					});
 				}
+
 				return deferredUtils.when(authenticate(), function (r) {
 					return r;
 				}, function (err) {
@@ -59,7 +63,11 @@ define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferre
 		};
 		this.logout = function () {
 			var self = this;
-			return deferredUtils.when(request.get(config.logoutUrl, { preventCache: false, handleAs: 'json', withCredentials: true }), function (data) {
+			return deferredUtils.when(request.get(config.logoutUrl, {
+				preventCache: false,
+				handleAs: 'json',
+				withCredentials: true
+			}), function (data) {
 				self.set('userName', null);
 				self.set('permissions', []);
 				self.emit('logout', data);
@@ -85,7 +93,11 @@ define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferre
 		};
 		this.authenticationStatus = function (requiredPermissions) {
 			var self = this;
-			return deferredUtils.when(request.get(config.loginUrl, { preventCache: false, handleAs: 'json', withCredentials: true }), function(data) {
+			return deferredUtils.when(request.get(config.loginUrl, {
+				preventCache: false,
+				handleAs: 'json',
+				withCredentials: true
+			}), function (data) {
 				var r = false;
 				if (data.result === 'success') {
 					self.data.mixinRecursive(data);
@@ -156,15 +168,15 @@ define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferre
 		this.hasPermission = function (permission) {
 			return this.hasAllPermissions([permission]);
 		};
-		router.register('/login', function() {
+		router.register('/login', function () {
 			enableLoginScreen();
 		}, extend.mixinRecursive({
 			emitArguments: {
 				tabKey: 'login'
 			}
 		}, config.loginRouterArguments || {}));
-		router.register('/logout', function() {
-			deferredUtils.when(self.logout(), function() {
+		router.register('/logout', function () {
+			deferredUtils.when(self.logout(), function () {
 				router.go('/');
 			});
 		}, extend.mixinRecursive({
@@ -172,7 +184,7 @@ define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferre
 				tabKey: 'logout'
 			}
 		}, config.logoutRouterArguments || {}));
-		deferredUtils.when(loginScreen.show(), function() {
+		deferredUtils.when(loginScreen.show(), function () {
 			frame.addChild(loginScreen.domNode);
 		});
 	});
