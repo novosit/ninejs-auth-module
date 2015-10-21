@@ -9,6 +9,7 @@
 	},
 	"devDependencies": {
 	},
+    	"main": "./module.js",
 	"component": {
 		"scripts": {}
 	},
