@@ -1,26 +1,34 @@
 {
-	"name": "ninejs-auth-module",
-	"description": "NineJs Authentication/Authorization module",
-	"version": "0.0.1",
-	"author": "Eduardo Burgos <eburgos@gmail.com>",
-	"repository": "git://github.com/ninejs/ninejs-auth-module",
-	"dependencies": {
-		"co": "^4.4.0"
-	},
-	"devDependencies": {
-	},
-    	"main": "./module.js",
-	"component": {
-		"scripts": {}
-	},
-	"scripts": {
-		"prepublish": "npm prune"
-	},
-	"contributors": [
-		{
-			"name": "Eduardo Burgos",
-			"email": "eburgos@gmail.com",
-			"url": "http://www.eduardoburgos.com/"
-		}
-	]
+  "name": "ninejs-auth-module",
+  "description": "NineJs Authentication/Authorization module",
+  "version": "0.0.1",
+  "author": "Eduardo Burgos <eburgos@gmail.com>",
+  "repository": "git://github.com/ninejs/ninejs-auth-module",
+  "dependencies": {
+    "co": "^4.4.0"
+  },
+  "devDependencies": {
+    "grunt-globaltsd": "git+https://github.com/eburgos/grunt-globaltsd.git#master",
+    "grunt-ts": "^5.2.0",
+    "kew": "^0.7.0",
+    "load-grunt-tasks": "^3.3.0",
+    "ninejs": "ninejs/ninejs#master",
+    "tsd": "^0.6.3",
+    "typedoc": "ninejs/typedoc",
+    "typescript": "git+https://github.com/Microsoft/typescript.git#dac1874c38c29352142757d14b06221af7590293"
+  },
+  "main": "./module.js",
+  "component": {
+    "scripts": {}
+  },
+  "scripts": {
+    "prepublish": "npm prune"
+  },
+  "contributors": [
+    {
+      "name": "Eduardo Burgos",
+      "email": "eburgos@gmail.com",
+      "url": "http://www.eduardoburgos.com/"
+    }
+  ]
 }

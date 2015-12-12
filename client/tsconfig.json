@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "module": "umd",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "target": "es5",
+    "isolatedModules": false,
+    "declaration": true,
+    "moduleResolution": "node",
+    "noLib": true,
+    "noEmitOnError": false
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "files": [
+    "../typings/tsd.d.ts",
+
+    "./module.ts",
+    "./Auth.ts",
+    "./LoginScreen.ts",
+    "./Skin/LoginScreen.ts"
+  ]
+}
