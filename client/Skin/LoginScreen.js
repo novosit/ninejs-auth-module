@@ -16,12 +16,12 @@
     var template = require('ninejs/nineplate!./LoginScreen.html');
     var validateInput = function (isValid) {
         var valid = isValid && this.userNameText.value && this.passwordText.value;
-        setClass_1.default(this.loginIcon, '!valid', '!invalid', '!glyphicon-exclamation-sign', '!glyphicon-check');
+        setClass_1.default(this.loginIcon, '!valid', '!invalid');
         if (valid) {
-            setClass_1.default(this.loginIcon, 'glyphicon-check', 'valid');
+            setClass_1.default(this.loginIcon, 'valid');
         }
         else {
-            setClass_1.default(this.loginIcon, 'glyphicon-exclamation-sign', 'invalid');
+            setClass_1.default(this.loginIcon, 'invalid');
         }
     };
     var validateUserName = function () {
@@ -38,12 +38,12 @@
             deferred.resolve(true);
         }
         return deferredUtils_1.when(deferred.promise, function (valid) {
-            setClass_1.default(self.userNameIcon, '!valid', '!invalid', '!glyphicon-exclamation-sign', '!glyphicon-check');
+            setClass_1.default(self.userNameIcon, '!valid', '!invalid');
             if (valid) {
-                setClass_1.default(self.userNameIcon, 'glyphicon-check', 'valid');
+                setClass_1.default(self.userNameIcon, 'valid');
             }
             else {
-                setClass_1.default(self.userNameIcon, 'glyphicon-exclamation-sign', 'invalid');
+                setClass_1.default(self.userNameIcon, 'invalid');
             }
             return valid;
         });
@@ -53,12 +53,12 @@
         if (this.passwordValidation) {
             message = this.passwordValidation(this.passwordText.value);
         }
-        setClass_1.default(this.passwordIcon, '!valid', '!invalid', '!glyphicon-exclamation-sign', '!glyphicon-check');
+        setClass_1.default(this.passwordIcon, '!valid', '!invalid');
         if (!message) {
-            setClass_1.default(this.passwordIcon, 'glyphicon-check', 'valid');
+            setClass_1.default(this.passwordIcon, 'valid');
         }
         else {
-            setClass_1.default(this.passwordIcon, 'glyphicon-exclamation-sign', 'invalid');
+            setClass_1.default(this.passwordIcon, 'invalid');
         }
         validateInput.call(this, !message);
     };
@@ -79,7 +79,10 @@
         validateInput: validateInput,
         validateUserName: validateUserName,
         validateUserNameBlur: validateUserNameBlur,
-        validatePassword: validatePassword
+        validatePassword: validatePassword,
+        alert: function (msg) {
+            window.alert(msg);
+        }
     });
 });
 //# sourceMappingURL=LoginScreen.js.map

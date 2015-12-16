@@ -14,12 +14,12 @@ let template = require('ninejs/nineplate!./LoginScreen.html');
 
 var validateInput = function (isValid: boolean) {
 	var valid = isValid && this.userNameText.value && this.passwordText.value;
-	setClass(this.loginIcon, '!valid', '!invalid', '!glyphicon-exclamation-sign', '!glyphicon-check');
+	setClass(this.loginIcon, '!valid', '!invalid');
 	if (valid) {
-		setClass(this.loginIcon, 'glyphicon-check', 'valid');
+		setClass(this.loginIcon, 'valid');
 	}
 	else {
-		setClass(this.loginIcon, 'glyphicon-exclamation-sign', 'invalid');
+		setClass(this.loginIcon, 'invalid');
 	}
 };
 var validateUserName = function () {
@@ -38,12 +38,12 @@ var validateUserNameBlur = function () {
 		deferred.resolve(true);
 	}
 	return when(deferred.promise, function (valid) {
-		setClass(self.userNameIcon, '!valid', '!invalid', '!glyphicon-exclamation-sign', '!glyphicon-check');
+		setClass(self.userNameIcon, '!valid', '!invalid');
 		if (valid) {
-			setClass(self.userNameIcon, 'glyphicon-check', 'valid');
+			setClass(self.userNameIcon, 'valid');
 		}
 		else {
-			setClass(self.userNameIcon, 'glyphicon-exclamation-sign', 'invalid');
+			setClass(self.userNameIcon, 'invalid');
 		}
 		return valid;
 	});
@@ -53,12 +53,12 @@ var validatePassword = function () {
 	if (this.passwordValidation) {
 		message = this.passwordValidation(this.passwordText.value);
 	}
-	setClass(this.passwordIcon, '!valid', '!invalid', '!glyphicon-exclamation-sign', '!glyphicon-check');
+	setClass(this.passwordIcon, '!valid', '!invalid');
 	if (!message) {
-		setClass(this.passwordIcon, 'glyphicon-check', 'valid');
+		setClass(this.passwordIcon, 'valid');
 	}
 	else {
-		setClass(this.passwordIcon, 'glyphicon-exclamation-sign', 'invalid');
+		setClass(this.passwordIcon, 'invalid');
 	}
 	validateInput.call(this, !message);
 };
@@ -83,5 +83,8 @@ export default new Skin({
 	validateInput: validateInput,
 	validateUserName: validateUserName,
 	validateUserNameBlur: validateUserNameBlur,
-	validatePassword: validatePassword
+	validatePassword: validatePassword,
+	alert: function (msg: string) {
+		window.alert(msg);
+	}
 });

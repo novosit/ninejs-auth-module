@@ -5,7 +5,6 @@
   "author": "Eduardo Burgos <eburgos@gmail.com>",
   "repository": "git://github.com/ninejs/ninejs-auth-module",
   "dependencies": {
-    "co": "^4.4.0"
   },
   "devDependencies": {
     "grunt-globaltsd": "git+https://github.com/eburgos/grunt-globaltsd.git#master",

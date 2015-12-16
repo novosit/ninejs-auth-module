@@ -63,7 +63,8 @@ var __extends = (this && this.__extends) || function (d, b) {
                         }, 0);
                     }
                     else {
-                        window.alert(data.message || 'login failed');
+                        var skin = self.currentSkin;
+                        skin.alert(data.message || 'login failed');
                     }
                     return true;
                 }, function (err) {
@@ -82,6 +83,9 @@ var __extends = (this && this.__extends) || function (d, b) {
     })(Widget_1.default);
     LoginScreen.prototype.skinContract = {
         'validateInput': {
+            type: 'function'
+        },
+        'alert': {
             type: 'function'
         }
     };

@@ -57,7 +57,8 @@ class LoginScreen extends Widget {
 					}, 0);
 				}
 				else {
-					window.alert(data.message || 'login failed');
+					let skin: any = self.currentSkin;
+					skin.alert(data.message || 'login failed');
 				}
 				return true;
 			}, function (err) {
@@ -88,6 +89,9 @@ class LoginScreen extends Widget {
 }
 LoginScreen.prototype.skinContract = {
 	'validateInput': {
+		type: 'function'
+	},
+	'alert': {
 		type: 'function'
 	}
 };
