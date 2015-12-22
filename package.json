@@ -1,7 +1,7 @@
 {
   "name": "ninejs-auth-module",
   "description": "NineJs Authentication/Authorization module",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Eduardo Burgos <eburgos@gmail.com>",
   "repository": "git://github.com/ninejs/ninejs-auth-module",
   "dependencies": {
@@ -11,7 +11,7 @@
     "grunt-ts": "^5.2.0",
     "kew": "^0.7.0",
     "load-grunt-tasks": "^3.3.0",
-    "ninejs": "ninejs/ninejs#master",
+    "ninejs": "0.2.0",
     "tsd": "^0.6.3",
     "typedoc": "ninejs/typedoc",
     "typescript": "git+https://github.com/Microsoft/typescript.git#dac1874c38c29352142757d14b06221af7590293"

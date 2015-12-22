@@ -205,7 +205,7 @@ class Auth extends Properties {
 		var loginScreen: LoginScreen,
 				self = this;
 		this.config = config;
-		this.data = new Properties();
+		this.data = new Properties({});
 		this.loginScreen = new LoginScreen({}, config);
 		this.frame = frame;
 		this.router = router;

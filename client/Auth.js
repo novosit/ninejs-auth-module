@@ -25,7 +25,7 @@ var __extends = (this && this.__extends) || function (d, b) {
             _super.call(this, {});
             var loginScreen, self = this;
             this.config = config;
-            this.data = new Properties_1.default();
+            this.data = new Properties_1.default({});
             this.loginScreen = new LoginScreen_1.default({}, config);
             this.frame = frame;
             this.router = router;
