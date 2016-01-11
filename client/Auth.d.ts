@@ -1,6 +1,5 @@
 import Properties from 'ninejs/core/ext/Properties';
 import { RemovableType } from 'ninejs/core/on';
-import { PromiseType } from 'ninejs/core/deferredUtils';
 import Frame from 'ninejs/modules/client/FullScreenFrame';
 import { Router, Route } from 'ninejs/client/router';
 import LoginScreen from "./LoginScreen";
@@ -20,14 +19,14 @@ declare class Auth extends Properties {
     data: Properties;
     frame: Frame;
     router: Router;
-    logout(): PromiseType<boolean>;
+    logout(): Promise<boolean>;
     register(route: string, action: (e: any) => any, permissions: string[], routeArguments: RouteArguments): Route;
-    login(): PromiseType<{}>;
-    enableLoginScreen(): PromiseType<void>;
-    authenticationStatus(requiredPermissions: (string[] | PermissionsFunction)): PromiseType<boolean>;
+    login(): Promise<{}>;
+    enableLoginScreen(): Promise<void>;
+    authenticationStatus(requiredPermissions: (string[] | PermissionsFunction)): Promise<boolean>;
     hasAllPermissions(permissions: string[]): boolean;
     hasPermission(permission: string): boolean;
     constructor(config: any, router: Router, frame: Frame);
-    init(): PromiseType<void>;
+    init(): Promise<void>;
 }
 export default Auth;

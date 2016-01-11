@@ -24,7 +24,7 @@ export interface AuthImpl {
 	getUser (username: string) : PromiseType<any>;
 }
 
-class Auth {
+class Auth implements AuthImpl {
 	on () {
 		return Evented.on.apply(this, arguments);
 	}
@@ -57,6 +57,9 @@ class Auth {
 	}
 	permissions () {
 		return this.impl.permissions();
+	}
+	getUser (username: string) {
+		return this.impl.getUser(username);
 	}
 	constructor (config: any, ninejs: NineJs, webserver: WebServer, impl: AuthImpl) {
 		this.config = config;

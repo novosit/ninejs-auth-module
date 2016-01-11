@@ -15,15 +15,16 @@ export interface AuthImpl {
     permissions(): PromiseType<any>;
     getUser(username: string): PromiseType<any>;
 }
-declare class Auth {
+declare class Auth implements AuthImpl {
     on(): any;
     emit(type: string, data: any): any;
     config: any;
     impl: AuthImpl;
-    login(username: string, password: string, domain?: any, callback?: (data: any) => void): PromiseType<any>;
-    usersByPermission(permissions: string[]): PromiseType<any>;
-    users(): PromiseType<any>;
-    permissions(): PromiseType<any>;
+    login(username: string, password: string, domain?: any, callback?: (data: any) => void): Promise<any>;
+    usersByPermission(permissions: string[]): Promise<any>;
+    users(): Promise<any>;
+    permissions(): Promise<any>;
+    getUser(username: string): Promise<any>;
     constructor(config: any, ninejs: NineJs, webserver: WebServer, impl: AuthImpl);
 }
 export default Auth;

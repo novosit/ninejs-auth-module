@@ -164,6 +164,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
         permissions() {
             return this.impl.permissions();
         }
+        getUser(username) {
+            return this.impl.getUser(username);
+        }
     }
     exports.default = Auth;
 });
