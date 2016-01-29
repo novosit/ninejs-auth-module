@@ -11,7 +11,7 @@
     "grunt-ts": "^5.2.0",
     "kew": "^0.7.0",
     "load-grunt-tasks": "^3.3.0",
-    "ninejs": "0.2.0",
+    "ninejs": "^0.2.2",
     "tsd": "^0.6.3",
     "typedoc": "ninejs/typedoc",
     "typescript": "git+https://github.com/Microsoft/typescript.git#dac1874c38c29352142757d14b06221af7590293"
