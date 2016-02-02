@@ -17,6 +17,7 @@
     "typescript": "git+https://github.com/Microsoft/typescript.git#dac1874c38c29352142757d14b06221af7590293"
   },
   "main": "./module.js",
+  "dojoBuild": "profile.build.js",
   "typings": "Auth.d.ts",
   "component": {
     "scripts": {}
