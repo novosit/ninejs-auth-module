@@ -16,7 +16,7 @@ var profile = {
 		ignore: function(filename, mid) {
 			var t = (/node_modules/).test(filename);
 			if (!t) {
-				var cnt, excluded = !(/\.js$/).test(filename);
+				var cnt, excluded = !(/\.js(on)?$/).test(filename);
 				for (cnt=0;(cnt < amdIgnore.length) && !excluded; cnt += 1){
 					if (mid.indexOf(amdIgnore[cnt]) === 0) {
 						excluded = true;
