@@ -13,13 +13,13 @@ define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferre
 				frame.set('selected', loginScreen);
 			});
 		};
-		this.register = function (route, action, permissions, routeArguments) {
+		this.register = function (route, action, permissions, routeArguments, licensedResources) {
 			routeArguments = routeArguments || {};
 			routeArguments.route = route;
 			routeArguments.action = function (evt) {
 				function authenticate() {
 					return deferredUtils.when(self.authenticationStatus(permissions || []), function (result) {
-						if (result) {
+						if (result && self.hasAllLicensedResources(licensedResources || [])) {
 							return deferredUtils.when(action.call(null, evt), function () {
 								return true;
 							});
@@ -38,7 +38,7 @@ define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferre
 								return defer.promise;
 							}, function (err) {
 								console.error(err);
-								throw err;								
+								throw err;
 							});
 						}
 					}, function (err) {
@@ -154,6 +154,26 @@ define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferre
 		};
 		this.hasPermission = function (permission) {
 			return this.hasAllPermissions([permission]);
+		};
+		/**
+		 * Indicates if the actual (logged in user) has a license allowing it to use all the given resources.
+		 * @param  {Array of String}  resources Resources asking for
+		 * @return {Boolean}             `true` if the user has access to ALL resources
+		 */
+		this.hasAllLicensedResources = function(resources) {
+			if (!this.data || !this.data.licensedResources || !this.data.licensedResources.length) {
+				return false;
+			}
+
+			return !resources.some( function (aResource) { this.data.licensedResources.indexOf(aResource) === -1; });
+		};
+		/**
+		 * Indicates if the actual (logged in user) has a license allowing it to use the given resource.
+		 * @param  {String}  resourceName The resource to check
+		 * @return {Boolean}              `true` if the user has access to the resource
+		 */
+		this.hasLicensedResource = function (resourceName) {
+			return this.hasAllLicensedResources([resourceName]);
 		};
 		router.register('/login', function() {
 			enableLoginScreen();
