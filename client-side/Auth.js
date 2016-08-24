@@ -156,16 +156,19 @@ define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferre
 			return this.hasAllPermissions([permission]);
 		};
 		/**
-		 * Indicates if the actual (logged in user) has a license allowing it to use all the given resources.
+		 * Indicates if the actual (logged in user) has a license allowing it to some of the given resources.
 		 * @param  {Array of String}  resources Resources asking for
-		 * @return {Boolean}             `true` if the user has access to ALL resources
+		 * @return {Boolean}             `true` if the user has access to SOME resources
 		 */
-		this.hasAllLicensedResources = function(resources) {
-			if (!this.data || !this.data.licensedResources || !this.data.licensedResources.length) {
+		this.hasSomeLicensedResources = function(resources) {
+			var self = this;
+			if (!self.data || !self.data.licensedResources || !self.data.licensedResources.length) {
 				return false;
 			}
 
-			return !resources.some( function (aResource) { this.data.licensedResources.indexOf(aResource) === -1; });
+			return resources.some( function (aResource) {
+				return self.data.licensedResources.indexOf(aResource) !== -1;
+			});
 		};
 		/**
 		 * Indicates if the actual (logged in user) has a license allowing it to use the given resource.
@@ -173,7 +176,7 @@ define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferre
 		 * @return {Boolean}              `true` if the user has access to the resource
 		 */
 		this.hasLicensedResource = function (resourceName) {
-			return this.hasAllLicensedResources([resourceName]);
+			return this.hasSomeLicensedResources([resourceName]);
 		};
 		router.register('/login', function() {
 			enableLoginScreen();
