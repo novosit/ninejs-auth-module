@@ -19,7 +19,7 @@ define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferre
 			routeArguments.action = function (evt) {
 				function authenticate() {
 					return deferredUtils.when(self.authenticationStatus(permissions || []), function (result) {
-						if (result && self.hasAllLicensedResources(licensedResources || [])) {
+						if (result && self.hasSomeLicensedResources(licensedResources || [])) {
 							return deferredUtils.when(action.call(null, evt), function () {
 								return true;
 							});
