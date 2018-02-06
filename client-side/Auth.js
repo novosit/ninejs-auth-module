@@ -58,7 +58,9 @@ define(['ninejs/core/extend', 'ninejs/core/ext/Properties', 'ninejs/core/deferre
 		};
 		this.logout = function () {
 			var self = this;
-			return deferredUtils.when(request.get(config.logoutUrl, { preventCache: false, handleAs: 'json', withCredentials: true }), function (data) {
+			var logoutUrl = config.ninejs && config.ninejs.logoutUrl;
+			logoutUrl = logoutUrl || config.logoutUrl;
+			return deferredUtils.when(request.get(logoutUrl, { preventCache: false, handleAs: 'json', withCredentials: true }), function (data) {
 				self.set('userName', null);
 				self.set('permissions', []);
 				self.emit('logout', data);
