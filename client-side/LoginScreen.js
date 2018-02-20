@@ -61,8 +61,13 @@ define(['ninejs/core/extend', 'ninejs/ui/Widget', './Skin/LoginScreen', 'ninejs/
 		var self = this;
 		this.config = config;
 		this.userName = '';
-		if (self.config.skin && self.config.skin.login) {
-			self.set('skin', self.config.skin.login);
+		if (self.config.skin) {
+			if (self.config.skin.loginObj) {
+				self.set('skin', self.config.skin.loginObj);
+			}
+			else {
+				self.set('skin', self.config.skin.login);
+			}
 		}
 	});
 	return LoginScreen;
