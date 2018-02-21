@@ -1,4 +1,4 @@
-define(['ninejs/core/extend', 'ninejs/ui/Widget', './Skin/LoginScreen', 'ninejs/core/i18n!./resources/i18n.json', 'ninejs/core/on', 'ninejs/core/deferredUtils', 'ninejs/request'], function(extend, Widget, defaultSkin, i18n, on, deferredUtils, request) {
+define(['ninejs/core/extend', 'ninejs/ui/Widget', './Skin/LoginScreen', 'ninejs/core/i18n!./resources/i18n.js', 'ninejs/core/on', 'ninejs/core/deferredUtils', 'ninejs/request'], function(extend, Widget, defaultSkin, i18n, on, deferredUtils, request) {
 	'use strict';
 
 	var resources = i18n.getResource(),
